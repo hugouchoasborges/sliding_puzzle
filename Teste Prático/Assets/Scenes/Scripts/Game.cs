@@ -289,8 +289,9 @@ public class Game : MonoBehaviour
             valuesTable[nullRow][nullCol] = valuesTable[row][col];
             valuesTable[row][col] = 0;
         }
-
-        movesValueText.text = (int.Parse(movesValueText.text) + 1).ToString();
+        
+        if(!shuffling)
+            movesValueText.text = (int.Parse(movesValueText.text) + 1).ToString();
 
         // Atualiza a tela
         UpdateScreen();
