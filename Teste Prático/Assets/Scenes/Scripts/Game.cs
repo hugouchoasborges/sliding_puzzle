@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 using Random = System.Random;
@@ -11,15 +12,25 @@ public class Game : MonoBehaviour
 {
     #region Variables
 
+    // Constants
     public const int TABLESIZE = 3;
 
+    // Shuffle Control Variables
     public int shuffleCount = 100;
     private bool shuffling = false;
     Random random = new Random(Environment.TickCount);
 
+    // Table Structure variables
     public Button[] buttonList = new Button[TABLESIZE * TABLESIZE];
     public Button[][] buttonTable = new Button[TABLESIZE][];
     public int[][] valuesTable = new int[TABLESIZE][];
+
+    // UI Variables
+    public Button shuffleButton;
+    public Button restartButton;
+
+    public TextMeshProUGUI movesValueText;
+    public TextMeshProUGUI victoryText;
 
     #endregion
 
@@ -27,6 +38,12 @@ public class Game : MonoBehaviour
 
     void Start()
     {
+        Assert.IsNotNull(shuffleButton);
+        Assert.IsNotNull(restartButton);
+        Assert.IsNotNull(movesValueText);
+        Assert.IsNotNull(victoryText);
+
+
         // Inicializa as tabelas do jogo
         FillTable();
 
