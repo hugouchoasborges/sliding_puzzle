@@ -1,7 +1,7 @@
 # Sliding Puzzle
 ---
 
-Jogo desenvolvido C# na game-engine Unity
+Jogo desenvolvido em C# na game-engine Unity
 
 - Versão da Unity utilizada: 2018.4.0f1
 
