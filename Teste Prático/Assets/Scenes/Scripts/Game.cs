@@ -1,15 +1,21 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Random = System.Random;
+
 public class Game : MonoBehaviour
 {
     #region Variables
 
     public const int TABLESIZE = 3;
+
+    public int shuffleCount = 100;
+    private bool shuffling = false;
+    Random random = new Random(Environment.TickCount);
 
     public Button[] buttonList = new Button[TABLESIZE * TABLESIZE];
     public Button[][] buttonTable = new Button[TABLESIZE][];
@@ -24,11 +30,11 @@ public class Game : MonoBehaviour
         // Inicializa as tabelas do jogo
         FillTable();
 
-        // Embaralha as posições dos blocos
-        //Shuffle();
-
         // Atualiza a tela
         UpdateScreen();
+
+        // Embaralha as posições dos blocos
+        Shuffle();
     }
 
     /// <summary>
@@ -123,33 +129,44 @@ public class Game : MonoBehaviour
     {
         List<Button> buttons = new List<Button>();
 
-        // Left Button
         buttons.Add(GetButton(row - 1, col));
         buttons.Add(GetButton(row + 1, col));
         buttons.Add(GetButton(row, col - 1));
         buttons.Add(GetButton(row, col + 1));
 
+        // Remove botões não encontrados
+        buttons.RemoveAll(b => b == null);
+
         return buttons;
     }
 
     /// <summary>
-    /// Procura pelo botão nulo
+    /// Procura pelo botão nulo ao redor da posição passada
     /// </summary>
-    /// <param name="row">Linha a ser pesquisada</param>
-    /// <param name="col">Coluna a ser pesquisada</param>
+    /// <param name="row">Linha a ser pesquisada ao redor</param>
+    /// <param name="col">Coluna a ser pesquisada ao redor</param>
     /// <returns>Retorna o botão nulo. Caso não o encontre, retorna nulo</returns>
     private Button GetNullButton(int row, int col)
     {
         List<Button> adjacentButtons = GetAdjacentButtons(row, col);
 
         foreach (Button b in adjacentButtons)
-        {
-            if (b == null)
-                continue;
-
             if (!b.GetComponent<Image>().isActiveAndEnabled)
                 return b;
-        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Procura pelo botão nulo
+    /// </summary>
+    /// <returns>Retorna o botão nulo</returns>
+    private Button GetNullButton()
+    {
+        foreach (Button[] bRow in buttonTable)
+            foreach(Button b in bRow)
+                if (!b.GetComponent<Image>().isActiveAndEnabled)
+                    return b;
 
         return null;
     }
@@ -163,7 +180,22 @@ public class Game : MonoBehaviour
     /// </summary>
     public void Shuffle()
     {
-        throw new System.NotImplementedException();
+        shuffling = true;
+        for (int i = 0; i < shuffleCount; i++)
+        {
+            // Pega o botão vazio
+            Button nullBtn = GetNullButton();
+
+            // Recupera suas posições (linha,coluna)
+            (int nullRow, int nullCol) = GetButtonRowCol(nullBtn);
+
+            // Botões adjances ao botão vazio
+            List<Button> adjButtons = GetAdjacentButtons(nullRow, nullCol);
+
+            // Clica em um dos botões adjacentes ao botão vazio
+            ButtonClick(adjButtons[random.Next(adjButtons.Count)]);
+        }
+        shuffling = false;
     }
 
     /// <summary>
@@ -197,6 +229,9 @@ public class Game : MonoBehaviour
     /// </summary>
     private void GameOver()
     {
+        if (shuffling)
+            return;
+
         throw new NotImplementedException();
     }
 

@@ -1891,6 +1891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ecc3094a1dff93428804e168969e9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shuffleCount: 100
   buttonList:
   - {fileID: 1841163462}
   - {fileID: 2010874729}
