@@ -177,6 +177,30 @@ public class Game : MonoBehaviour
     }
 
     /// <summary>
+    /// Verifica se o jogo acabou (Player venceu)
+    /// </summary>
+    /// <returns>Retorna true se o jogo acabou, false caso contrário</returns>
+    private bool CheckGameState()
+    {
+        const int tableSqrSize = TABLESIZE * TABLESIZE;
+
+        for (int i = 0; i < TABLESIZE; i++)
+            for (int j = 0; j < TABLESIZE; j++)
+                if(valuesTable[i][j] != (j + TABLESIZE * i + 1) % tableSqrSize)
+                    return false;
+                
+        return true;
+    }
+
+    /// <summary>
+    /// Fim de jogo. Mostra um mensagem na tela, bloqueia novas jogadas e mostra um botão para reiniciar o jogo
+    /// </summary>
+    private void GameOver()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// Realiza a troca de posição entre dois botões
     /// </summary>
     public void ButtonClick()
@@ -208,6 +232,10 @@ public class Game : MonoBehaviour
 
         // Atualiza a tela
         UpdateScreen();
+
+        // Condição de Vitória
+        if (CheckGameState())
+            GameOver();
     }
 
     #endregion
