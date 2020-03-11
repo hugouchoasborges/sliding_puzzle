@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -200,14 +200,8 @@ public class Game : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// Realiza a troca de posição entre dois botões
-    /// </summary>
-    public void ButtonClick()
+    private void ButtonClick(Button btn)
     {
-        // Obtém o botão clicado
-        GameObject gObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-        Button btn = gObj.GetComponentInChildren<Button>();
         TextMeshProUGUI textMP = btn.GetComponentInChildren<TextMeshProUGUI>();
 
         // Se o botão está com a imagem desativada, não faz nada
@@ -236,6 +230,17 @@ public class Game : MonoBehaviour
         // Condição de Vitória
         if (CheckGameState())
             GameOver();
+    }
+
+    /// <summary>
+    /// Realiza a troca de posição entre dois botões
+    /// </summary>
+    public void ButtonClick()
+    {
+        // Obtém o botão clicado
+        GameObject gObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+        Button btn = gObj.GetComponentInChildren<Button>();
+        ButtonClick(btn);
     }
 
     #endregion
