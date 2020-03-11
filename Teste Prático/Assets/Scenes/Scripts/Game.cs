@@ -50,7 +50,7 @@ public class Game : MonoBehaviour
             {
                 int idx = j + TABLESIZE * i;
                 buttonTable[i][j] = buttonList[idx];
-                valuesTable[i][j] = idx;
+                valuesTable[i][j] = (idx + 1) % (TABLESIZE * TABLESIZE);
             }
         }
     }
