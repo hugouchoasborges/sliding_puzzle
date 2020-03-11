@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
@@ -20,17 +21,20 @@ public class Game : MonoBehaviour
     private bool shuffling = false;
     Random random = new Random(Environment.TickCount);
 
+    // Gameover Controle
+    private bool gameover = false;
+
     // Table Structure variables
     public Button[] buttonList = new Button[TABLESIZE * TABLESIZE];
     public Button[][] buttonTable = new Button[TABLESIZE][];
     public int[][] valuesTable = new int[TABLESIZE][];
 
     // UI Variables
-    public Button shuffleButton;
-    public Button restartButton;
+    public GameObject shuffleButton;
+    public GameObject restartButton;
 
     public TextMeshProUGUI movesValueText;
-    public TextMeshProUGUI victoryText;
+    public GameObject victoryText;
 
     #endregion
 
@@ -249,11 +253,21 @@ public class Game : MonoBehaviour
         if (shuffling)
             return;
 
-        throw new NotImplementedException();
+        gameover = true;
+        restartButton.SetActive(true);
+        shuffleButton.SetActive(false);
+        victoryText.SetActive(true);
     }
 
+    /// <summary>
+    /// Realiza a troca de posição entre o botão nulo e outro
+    /// </summary>
+    /// <param name="btn">O botão a ser trocado de posição com o botão nulo</param>
     private void ButtonClick(Button btn)
     {
+        if (gameover)
+            return;
+
         TextMeshProUGUI textMP = btn.GetComponentInChildren<TextMeshProUGUI>();
 
         // Se o botão está com a imagem desativada, não faz nada
@@ -276,6 +290,8 @@ public class Game : MonoBehaviour
             valuesTable[row][col] = 0;
         }
 
+        movesValueText.text = (int.Parse(movesValueText.text) + 1).ToString();
+
         // Atualiza a tela
         UpdateScreen();
 
@@ -293,6 +309,14 @@ public class Game : MonoBehaviour
         GameObject gObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
         Button btn = gObj.GetComponentInChildren<Button>();
         ButtonClick(btn);
+    }
+
+    /// <summary>
+    /// Reinicia o jogo
+    /// </summary>
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     #endregion
